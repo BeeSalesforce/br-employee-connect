@@ -39,7 +39,6 @@ public class KafkaConfig {
 	}
 
 	private Map<String, Object> buildDefaults() {
-//		Properties properties = new Properties();
 		Map<String, Object> properties = new HashMap<>();
 		List<String> hostPorts = Lists.newArrayList();
 
@@ -97,11 +96,6 @@ public class KafkaConfig {
 
 	@Bean
 	public KafkaAdmin kafkaAdmin() {
-		System.out.println("KAFKA_PREFIX=" + getenv("KAFKA_PREFIX"));
-		System.out.println("KAFKA_URL=" + getenv("KAFKA_URL"));
-		System.out.println("KAFKA_CLIENT_CERT_KEY=" + getenv("KAFKA_CLIENT_CERT_KEY"));
-		System.out.println("KAFKA_TRUSTED_CERT=" + getenv("KAFKA_TRUSTED_CERT"));
-		System.out.println("KAFKA_CLIENT_CERT=" + getenv("KAFKA_CLIENT_CERT"));
 		return new KafkaAdmin(buildDefaults());
 	}
 	
@@ -109,21 +103,9 @@ public class KafkaConfig {
 	public ConsumerFactory<String, Object> consumerFactory() {
 		
 		Map<String, Object> defaults = buildDefaults();
-		
-		debugMap(defaults);
-		
 		return new DefaultKafkaConsumerFactory<>(defaults);
 	}
 
-	private void debugMap(Map<String, Object> defaults) {
-		// TODO Auto-generated method stub
-		for (String s: defaults.keySet()) {
-			Object value = defaults.get(s);
-			System.out.println("[" + s + "]=" + value);
-		}
-	}
-
-	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
